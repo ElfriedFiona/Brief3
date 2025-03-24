@@ -18,7 +18,6 @@ class DashboardController {
 
     public function index() {
         $users = $this->userModel->getAll();
-        // Vous pouvez ajouter d'autres statistiques et logs ici
         // Récupérer tous les logs
     $logs = $this->sessionModel->getAllLogs();
         require_once __DIR__ . '/../views/dashboard.php';

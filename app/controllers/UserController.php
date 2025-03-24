@@ -50,6 +50,7 @@ class UserController {
             $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
             $role_id = filter_input(INPUT_POST, 'role_id', FILTER_VALIDATE_INT);
             if ($this->userModel->create($username, $email, $password, $role_id)) {
+                echo "<script type=\"text/javascript\">alert('compte créé')</script>";
                 header("Location: index.php?controller=dashboard&action=index");
                 exit;
             }
@@ -70,6 +71,7 @@ class UserController {
             $role_id = filter_input(INPUT_POST, 'role_id', FILTER_VALIDATE_INT);
             $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
             $this->userModel->updateAdmin($id, $username, $email, $role_id, $status);
+            echo "<script type=\"text/javascript\">alert('compte modifié avec succes')</script>";
             header("Location: index.php?controller=dashboard&action=index");
             exit;
         }
@@ -92,12 +94,39 @@ class UserController {
             $_SESSION['user']['username'] = $username;
             $_SESSION['user']['email'] = $email;
             
+            echo "<script type=\"text/javascript\">alert('Vos informations personnelles ont été mis à jour avec succes')</script>";
             // Rediriger vers le profil ou une autre page
             header("Location: index.php?controller=user&action=profile");
             exit;
         } else {
             // Si la méthode n'est pas POST, rediriger vers le profil
             header("Location: index.php?controller=user&action=profile");
+            exit;
+        }
+    }
+
+    public function updateAdmin() {
+        // Vérifier que la requête est bien en POST
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Filtrer et récupérer les valeurs envoyées
+            $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            
+            // On suppose que la méthode update() dans le modèle User met à jour username et email pour l'utilisateur
+            $userId = $_SESSION['user']['id'];
+            $this->userModel->update($userId, $username, $email);
+            
+            // Mettre à jour les données dans la session
+            $_SESSION['user']['username'] = $username;
+            $_SESSION['user']['email'] = $email;
+            
+            echo 'ok';
+            // Rediriger vers le profil ou une autre page
+            header("Location: index.php?controller=dashboard&action=index");
+            exit;
+        } else {
+            // Si la méthode n'est pas POST, rediriger vers le profil
+            header("Location: index.php?controller=dashboard&action=index");
             exit;
         }
     }

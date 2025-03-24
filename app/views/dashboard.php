@@ -206,7 +206,9 @@ foreach ($logs as $log) {
                                 <p><strong>Email :</strong> <?= htmlspecialchars($_SESSION['user']['email']) ?></p>
                                 <p><strong>Rôle :</strong> <?= htmlspecialchars($_SESSION['user']['role_id']) ?></p>
                                 <!-- Bouton Modifier pour permettre la mise à jour des infos -->
-                                <a href="index.php?controller=user&action=editProfile" class="btn btn-primary">Modifier mes informations</a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateProfileModal">
+            Modifier 
+        </button>
                             </div>
                         </div>
                     </div>
@@ -216,6 +218,35 @@ foreach ($logs as $log) {
             <!-- Fin contenu principal -->
         </div>
     </div>
+
+    <!-- Modale pour la mise à jour du profil -->
+    <div id="updateProfileModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Contenu de la modale -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modifier mes informations</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="index.php?controller=user&action=updateAdmin">
+                    <div class="form-group">
+                        <label>Nom d'utilisateur :</label>
+                        <input type="text" name="username" class="form-control" value="<?= htmlspecialchars($_SESSION['user']['username']) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email :</label>
+                        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($_SESSION['user']['email']) ?>" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal d'ajout d'un utilisateur -->
     <div id="add_User" class="modal fade" role="dialog">
@@ -286,7 +317,7 @@ foreach ($logs as $log) {
                         <div class="form-group">
                             <label>Rôle :</label>
                             <select name="role_id" id="edit-role" class="form-control" required>
-                                <!-- Vous pouvez adapter la liste en fonction de vos rôles -->
+                                
                                 <option value="1">Administrateur</option>
                                 <option value="2">Client</option>
                             </select>
